@@ -1,4 +1,3 @@
-import pprint
 import time
 
 import requests
@@ -65,7 +64,6 @@ def main():
             if response.json()['status'] == 'found':
                 send_notification(bot=bot, message=response.json())
                 continue
-            pprint.pprint(response.json())
             timestamp = response.json()['timestamp_to_request']
         except ReadTimeout as e:
             print(e)
