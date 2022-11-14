@@ -65,13 +65,14 @@ def main():
                 timeout=100
             )
             response.raise_for_status()
-            if response.json()['status'] == 'found':
+            response_decoded = response.json()
+            if response_decoded['status'] == 'found':
                 send_notification(bot=bot,
                                   tg_chat_id=tg_chat_id,
-                                  message=response.json()
+                                  message=response_decoded
                                   )
                 continue
-            timestamp = response.json()['timestamp_to_request']
+            timestamp = response_decoded['timestamp_to_request']
         except ReadTimeout as e:
             print(e)
             continue
