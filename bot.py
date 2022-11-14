@@ -73,8 +73,7 @@ def main():
                                   )
                 continue
             timestamp = response_decoded['timestamp_to_request']
-        except ReadTimeout as e:
-            print(e)
+        except ReadTimeout:
             continue
         except ConnectionError as e:
             print(e)
