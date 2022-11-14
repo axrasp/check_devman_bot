@@ -23,6 +23,7 @@ BOT_TOKEN="57322135551:AAEUFDZDBE"
 
 - DEVMAN_TOKEN - токен в вашем личном кабинете [школы Devman](https://dvmn.org/api/docs/) 
 - BOT TOKEN - токен от телеграм бота
+- TG_CHAT_ID - ваш номер chat_id, его можно получить в [боте](https://t.me/getmyid_bot)
 
 ## Запуск на локальном сервере
 
