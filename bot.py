@@ -71,7 +71,9 @@ def main():
                                   tg_chat_id=tg_chat_id,
                                   message=review_status
                                   )
+                timestamp = review_status['last_attempt_timestamp']
                 continue
+
             timestamp = review_status['timestamp_to_request']
         except ReadTimeout:
             continue
