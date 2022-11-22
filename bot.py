@@ -1,3 +1,4 @@
+import logging
 import textwrap as tw
 import time
 
@@ -40,6 +41,9 @@ def send_notification(bot, tg_chat_id, message):
 
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)
+    logging.debug('Старт бота')
+
     env = Env()
     env.read_env()
     bot_token = env.str('BOT_TOKEN')
