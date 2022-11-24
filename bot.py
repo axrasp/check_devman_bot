@@ -66,7 +66,6 @@ def main():
 
     logger.setLevel(logging.WARNING)
     logger.addHandler(TelegramLogsHandler(tg_bot=bot, chat_id=tg_chat_id))
-    logger.error('Lost connection')
 
     headers = {
         'Authorization': f'Token {devman_token}'
