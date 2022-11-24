@@ -9,7 +9,6 @@ from telegram import Bot
 
 logger = logging.getLogger('Logger')
 
-
 class TelegramLogsHandler(logging.Handler):
 
     def __init__(self, tg_bot, chat_id):
@@ -59,56 +58,55 @@ def main():
     env.read_env()
     bot_token = env.str('BOT_TOKEN')
     bot = Bot(bot_token)
-    tg_chat_id = env.str('TG_CHAT_ID')
+    chat_id = env.str('TG_CHAT_ID')
     devman_token = env.str('DEVMAN_TOKEN')
     timestamp = ''
     url = "https://dvmn.org/api/long_polling/"
 
     logger.setLevel(logging.WARNING)
-    logger.addHandler(TelegramLogsHandler(tg_bot=bot, chat_id=tg_chat_id))
+    logger.addHandler(TelegramLogsHandler(tg_bot=bot, chat_id=chat_id))
 
     headers = {
         'Authorization': f'Token {devman_token}'
     }
+    logger.warning('Бот запущен')
+
     while True:
+        payload = {
+            'timestamp': timestamp
+        }
         try:
-            logger.warning('Бот запущен')
-            while True:
-                payload = {
-                    'timestamp': timestamp
-                }
-                try:
-                    response = requests.get(
-                        url,
-                        params=payload,
-                        headers=headers,
-                        timeout=100
-                    )
-                    response.raise_for_status()
-                    review_status = response.json()
-                    if review_status['status'] == 'found':
-                        send_notification(bot=bot,
-                                          tg_chat_id=tg_chat_id,
-                                          message=review_status
-                                          )
-                        timestamp = review_status['last_attempt_timestamp']
-                        continue
+            response = requests.get(
+                url,
+                params=payload,
+                headers=headers,
+                timeout=100
+            )
+            response.raise_for_status()
+            review_status = response.json()
+            if review_status['status'] == 'found':
+                send_notification(bot=bot,
+                                  tg_chat_id=chat_id,
+                                  message=review_status
+                                  )
+                timestamp = review_status['last_attempt_timestamp']
+                continue
 
-                    timestamp = review_status['timestamp_to_request']
+            timestamp = review_status['timestamp_to_request']
 
-                except ReadTimeout:
-                    continue
+        except ReadTimeout:
+            continue
 
-                except ConnectionError:
-                    logger.error('Потеряно соединение')
-                    time.sleep(5)
-                    logger.warning('Перезапуск бота')
-                    continue
+        except ConnectionError:
+            logger.error('Потеряно соединение')
+            time.sleep(5)
+            logger.warning('Перезапуск бота')
+            continue
 
         except Exception as e:
-            logger.error('Бот упал с ошибкой:')
+            logger.error('Возникла ошибка:')
             logger.error(e, exc_info=True)
-            logger.warning('Перезапуск бота')
+            logger.warning('Перезапускаю бот')
             continue
 
 
