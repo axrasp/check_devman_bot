@@ -107,7 +107,7 @@ def main():
 
         except Exception as e:
             logger.error('Бот упал с ошибкой:')
-            logger.error(e)
+            logger.error(e, exc_info=True)
             logger.warning('Перезапуск бота')
             continue
 
