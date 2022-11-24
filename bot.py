@@ -21,8 +21,7 @@ class TelegramLogsHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-def send_notification(bot, tg_chat_id, message):
-    chat_id = tg_chat_id
+def send_notification(bot, chat_id, message):
     for attempts in message['new_attempts']:
         if attempts['is_negative']:
             text = f'''\
